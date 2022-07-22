@@ -1,0 +1,32 @@
+
+
+   <%- include('header')-%>
+   <div class="main-body">
+
+   <%posts.forEach(function(post){%>
+
+    <div class="posts">
+        <h2><%= post.title%></h2>
+        <hr>
+        <p><%=post.blog.substring(0,300)+" ...."%>
+            <a href="/<%= post._id %>"><b>Read More</b></a>
+        </p>
+    </div>
+
+   <%})%>
+ 
+  
+    <a href="/compose"><button class="add-button btn btn-primary"><i class="material-icons-outlined">edit</i>
+                        </button>
+    </a>
+   </div>
+   
+
+
+
+
+
+
+
+
+

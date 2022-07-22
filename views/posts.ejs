@@ -1,0 +1,20 @@
+
+        <%- include('header')-%>
+
+           <div class="full-post">
+                <h1><%= Title%></h1>
+                <p><%= Blog%></p>
+           </div>
+           <br>
+           
+           <div class="butons">
+                <form action="/:post_id" method="post">
+                    <button type="submit" class="btn btn-danger" value="delete">Delete</button>
+                </form>
+                
+                <a href="/<%=post_id%>/edit"><button type="submit" class="btn btn-success">Edit</button></a>
+                
+                <button type="submit" class="btn btn-secondary " value="go-back"><a href = '/'>Go Back</a></button>
+           </div>
+          
+ 

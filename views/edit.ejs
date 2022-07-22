@@ -1,0 +1,19 @@
+<%- include('header')-%>
+<div class="main-body">
+ <h1><%= pageTitle %></h1>
+<form action="/<%=post_id%>/edit" method="post" class="post">
+    <div class="form-group">
+        <label for="inputTitle">Title</label>
+        <input type="text" name="newTitle" id="inputTitle"class="form-control" value="<%= placeholderTitle%>">
+    </div>
+    <br>
+    <div class="form-group">
+        <label for="inputPost">Post</label>
+        <textarea cols="40" rows="5" name="newBlog" id="inputPost" class="form-control" placeholder="<%=placeholderBlog%>"></textarea>
+    </div>
+    <br>
+    <button type="submit" class="btn btn-primary" value="submit">Edit</button>
+
+</form>
+
+</div>

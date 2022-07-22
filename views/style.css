@@ -1,0 +1,141 @@
+
+html{
+    background-color: white;
+
+    --header-color: rgb(199, 203, 203);
+    --background-color:rgb(207, 189, 189);
+}
+h2{
+    display: inline-block;
+    padding: 10px;
+    border-radius: 10%;
+}
+body{
+    font-size: 16px;
+    width: 90%;
+    margin: auto;
+    
+}
+hr{
+    color: black;
+}
+a{
+    text-decoration: none;
+    color: inherit;
+}
+a:hover{
+    color: red;
+}
+
+/* nav bar */
+nav{
+    padding: 5px;
+    display: flex;
+    background-color: var(--background-color);
+    justify-content: space-between;
+    height: 70px;
+    text-align: center;
+    align-items: center;
+   
+}
+
+nav ul{
+    display: flex;
+}
+nav ul li{
+    list-style: none;
+    margin: 20px;
+}
+nav ul li:hover{
+   color: red;
+   border-bottom: 2px solid red;
+}
+
+
+/* body */
+.main-body{
+    padding: 20px;
+}
+.posts{
+    background-color: var(--background-color);
+    padding: 15px;
+    margin-bottom: 10px;
+}
+.post{
+    background-color: var(--background-color);
+    padding: 15px;
+    margin-bottom: 10px;
+}
+.posts:hover{
+    transform: scale(1.01);
+    border: 2px solid black;
+    border-radius: 20px;
+}
+.posts h2{
+    background-color: var(--header-color)
+}
+
+/* footer */
+
+footer{
+    position: fixed;
+    margin: 0%;
+    padding: 0%;
+    background-color: rgb(128, 236, 128);
+    width: 90%;
+    text-align: center;
+    color: rgb(0, 0, 0);
+    height: 50px;
+    bottom: 0;
+}
+/* compose */
+input{
+    width: 100%;
+}
+#inputPost{
+    height: 150px;
+    border: 1px solid black;
+}
+#inputTitle{
+    height: 30px;
+    border: 1px solid black;
+}
+label{
+    font-weight: bold;
+}
+/* add button */
+
+.add-button{
+    min-height: 80px;
+    min-width: 80px;
+    border-radius: 50%;
+    position: fixed;
+    right: 20px;
+    bottom:75px;
+   
+}
+.add-button:hover{
+    border: 5px solid rgb(128, 236, 128) ;
+}
+.material-icons-outlined{
+    transform: scale(1.5);
+}
+
+
+.full-post{
+    margin-top: 20px;
+    padding: 20px;
+    height: 70%;
+    background-color: var(--background-color);
+}
+.full-post h1{
+    background-color: var(--header-color);
+}
+.btn{
+    width: 100px;
+    height: 50px;
+    margin: 20px;
+}
+.butons{
+    display: flex;
+}

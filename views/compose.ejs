@@ -1,0 +1,21 @@
+<%- include('header')-%>
+<div class="main-body">
+ <h1><%= pageTitle %></h1>
+<form action="/compose" method="post">
+    <div class="form-group">
+        <label for="inputTitle">Title</label>
+        <input type="text" name="inputTitle" id="inputTitle"class="form-control">
+    </div>
+    <br>
+    <div class="form-group">
+        <label for="inputPost">Post</label>
+        <textarea cols="40" rows="5" name="inputBlog" id="inputPost" class="form-control"></textarea>
+    </div>
+    <br>
+    <button type="submit" class="btn btn-primary" value="submit">Publish</button>
+
+</form>
+
+</div>
+
+
