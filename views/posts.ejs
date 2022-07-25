@@ -8,13 +8,13 @@
            <br>
            
            <div class="butons">
-                <form action="/:post_id" method="post">
+                <form action="/post/<%=post_id%>" method="post">
                     <button type="submit" class="btn btn-danger" value="delete">Delete</button>
                 </form>
                 
-                <a href="/<%=post_id%>/edit"><button type="submit" class="btn btn-success">Edit</button></a>
+                <a href="/post/<%=post_id%>/edit"><button type="submit" class="btn btn-success">Edit</button></a>
                 
-                <button type="submit" class="btn btn-secondary " value="go-back"><a href = '/'>Go Back</a></button>
+                <button type="submit" class="btn btn-secondary " value="go-back"><a href = '/home'>Go Back</a></button>
            </div>
           
  

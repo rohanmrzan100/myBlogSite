@@ -5,14 +5,15 @@ const mongoose = require('mongoose');
 const path = require('path');
 
 
-var distDir = __dirname + "/dist/";
-app.use(express.static(distDir));
-
-mongoose.connect("mongodb+srv://rohan:dlmddlmdmongodb@cluster1.ydurd.mongodb.net/postsDB");
+const connectionString = "mongodb+srv://rohan123:dlmddlmdmongodb@cluster0.ydurd.mongodb.net/PostsDB?retryWrites=true&w=majority"
+const connectDB = ()=>{mongoose.connect(connectionString)}
 app.use(express.urlencoded({extended:true}));
 app.use(express.static("views"));
 app.set('view engine','ejs')
- 
+
+
+
+
 const postSchema = new mongoose.Schema({
     title:String,
     blog:String
@@ -27,7 +28,7 @@ const contactText = "Lorem passages, and more recently with desktop publishing s
 
 
 
-app.get('/',function(req,res){
+app.get('/home',function(req,res){
     postModel.find((err,post)=>{
        
             res.render('index',{
@@ -45,89 +46,101 @@ app.get('/about',function(req,res){
 app.get('/contact',function(req,res){
     res.render('contact',{pageText:contactText,pageTitle:"Contact"})
 })
-app.get('/compose',function(req,res){
-    res.render('compose',{pageTitle:"Compose the blog"})
-})
-app.post('/compose',function(req,res){
-    const newPost = new postModel({
-        title:req.body.inputTitle,
-        blog: req.body.inputBlog
-    }) 
-    newPost.save();
-    res.redirect("/");
-})
-
-app.get("/:post_id",function(req,res){
-
-    const requestedPostID = req.params.post_id;
-    postModel.find((err,posts)=>{
-        posts.forEach((post)=>{
-            if(post.id === requestedPostID){
-               res.render('posts',{
-                Title:post.title,
-                Blog:post.blog,
-                post_id :post.id
-            })
-             
-            }
-        })
+app.route('/compose')
+    .get((req,res)=>{
+        res.render('compose',{pageTitle:"Compose the blog"})
     })
- 
-})
 
-app.post("/:post_id",(req,res)=>{
-   
-    const requestedPostID = req.params.post_id;
-    postModel.findOneAndRemove({id:req.params.id},(err)=>{
-        if(err){
-            console.log(err);
-        }
-        else{
-            console.log("deletion sucessful");
-       
-        }
-    })
+    .post((req,res)=>{
+        const newPost = new postModel({
+            title:req.body.inputTitle,
+            blog: req.body.inputBlog
+        }) 
+        newPost.save();
+        res.redirect("/home");
     
-  
-   res.redirect('/')
-})
-
-app.get('/:post_id/edit',(req,res)=>{
-
-    postModel.find((err,posts)=>{
-        posts.forEach((post)=>{
-            if(req.params.post_id === post.id){
         
-                res.render('edit',{
-                    pageTitle:"Edit Here",
-                    placeholderTitle:post.title,
-                    placeholderBlog:post.blog,
-                    post_id : post.id
-            
+    });
+
+app.route("/post/:post_id")
+    .get((req,res)=>{
+        const requestedPostID = req.params.post_id;
+        postModel.find((err,posts)=>{
+            posts.forEach((post)=>{
+                if(post.id === requestedPostID){
+                res.render('posts',{
+                    Title:post.title,
+                    Blog:post.blog,
+                    post_id :post.id
                 })
+                
+                }
+            })
+        })
+    
+    })
+    .post((req,res)=>{
+    
+        const requestedPostID = req.params.post_id;
+        postModel.findOneAndRemove({id:req.params.id},(err)=>{
+            if(err){
+                console.log(err);
+            }
+            else{
+                console.log("deletion sucessful");
+        
             }
         })
-    })
-})
+        
+    
+    res.redirect('/home')
+    });
 
-app.post('/:post_id/edit',(req,res)=>{
-    console.log(req.params.post_id);
-    console.log(req.body.newTitle);
-    console.log(req.body.newBlog);
-    postModel.updateOne({_id:req.params.post_id},{
-        blog:req.body.newBlog,
-        title:req.body.newTitle,
-    },(err)=>{
-        if(err){
-            console.log(err);
-        }else{
-            console.log('Successfully edited');
-        }
+    app.route('/post/:post_id/edit')
+    .get((req,res)=>{
+
+        postModel.find((err,posts)=>{
+            posts.forEach((post)=>{
+                if(req.params.post_id === post.id){
+            
+                    res.render('edit',{
+                        pageTitle:"Edit Here",
+                        placeholderTitle:post.title,
+                        placeholderBlog:post.blog,
+                        post_id : post.id
+                
+                    })
+                }
+            })
+        })
     })
-    res.redirect('/');
-})
+
+    .post((req,res)=>{
+        
+        postModel.updateOne({_id:req.params.post_id},{
+            blog:req.body.newBlog,
+            title:req.body.newTitle,
+        },(err)=>{
+            if(err){
+                console.log(err);
+            }else{
+                console.log('Successfully edited');
+            }
+        })
+        res.redirect('/home');
+    });
+
+
 const PORT = process.env.PORT || 3000
-app.listen(PORT ,()=>console.log("The server is running in port 3000"))
+const start = async ()=>{
+    try {
+         await connectDB();
+         app.listen(PORT ,()=>console.log(`The server is running on ${PORT}`))
+    } catch (error) {
+        console.log(error);
+    }
+}
 
+start();
 
 
