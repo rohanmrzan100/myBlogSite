@@ -1,0 +1,43 @@
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm i harness-lighthouse
+    - run: npx harness-lighthouse --url https://www.facebook.com
+    - run: ls
+    - uses: actions/upload-artifact@v1
+      with:
+          name: result
+          path: output
+
+    - uses: actions/download-artifact@v1
+      with:
+          name: result
+    - name: comment PR
+      uses: machine-learning-apps/pr-comment@master
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+          path: result/result.txt
