@@ -35,9 +35,7 @@ jobs:
     - uses: actions/download-artifact@v1
       with:
           name: result
-    - name: comment PR
-      uses: machine-learning-apps/pr-comment@master
-      env:
-          GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
+    - name: PR comment with file
+      uses: thollander/actions-comment-pull-request@v2
       with:
-          path: result/result.txt
+          filePath: /path/to/file.txt
