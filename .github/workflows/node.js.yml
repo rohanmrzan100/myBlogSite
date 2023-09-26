@@ -1,41 +1,62 @@
-
 name: Lighthouse Check
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: [14.x] # Change this to the desired Node.js version
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm i harness-lighthouse
-    - run: npx harness-lighthouse --url https://www.facebook.com
-    - run: ls
-    - uses: actions/upload-artifact@v1
-      with:
-          name: result
-          path: output
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - uses: actions/download-artifact@v1
-      with:
-          name: result
-    - name: PR comment with file
-      uses: thollander/actions-comment-pull-request@v2
-      with:
-          filePath: result/result.txt
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install harness-lighthouse
+
+      - name: Run Lighthouse check
+        run: npx harness-lighthouse --url https://www.facebook.com
+
+      - name: Save Lighthouse results
+        run: mv output result # Rename the output folder to result
+
+      - name: Upload Lighthouse results
+        uses: actions/upload-artifact@v2
+        with:
+          name: lighthouse-results
+          path: result # Upload the result folder as an artifact
+
+  post-comment:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Download Lighthouse results
+        uses: actions/download-artifact@v2
+        with:
+          name: lighthouse-results
+
+      - name: PR comment with Lighthouse report
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_COMMENT: |
+            **Lighthouse Report**
+            ```plaintext
+            $(cat lighthouse-results/result.txt)
+            ```
